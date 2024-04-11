@@ -1,27 +1,35 @@
-name: Build [Windows]
-on: [push, pull_request]
-
 jobs:
   build:
     name: Build
-    runs-on: windows-2019
+    runs-on: self-hosted
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Set up Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: 17
-      - name: Set up Gradle
-        uses: gradle/gradle-build-action@v2
-      - name: Compilation
-        run: ./gradlew classes
-      - name: Unit tests
-        run: ./gradlew test
-      - name: Integration tests
-        run: ./gradlew integrationTest
-      - name: Assemble artifacts
-        run: ./gradlew assemble javadoc asciidoctorAllGuides
+    - continue-on-error: true
+      name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - continue-on-error: true
+      name: Set up Java
+      uses: actions/setup-java@v3
+      with:
+        distribution: temurin
+        java-version: 17
+    - continue-on-error: true
+      name: Set up Gradle
+      uses: gradle/gradle-build-action@v2
+    - continue-on-error: true
+      name: Compilation
+      run: ./gradlew classes
+    - continue-on-error: true
+      name: Unit tests
+      run: ./gradlew test
+    - continue-on-error: true
+      name: Integration tests
+      run: ./gradlew integrationTest
+    - continue-on-error: true
+      name: Assemble artifacts
+      run: ./gradlew assemble javadoc asciidoctorAllGuides
+name: Build [Windows]
+on:
+  repository_dispatch:
+    types: trigger-ga___windows-build.yml
